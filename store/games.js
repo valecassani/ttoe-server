@@ -9,7 +9,6 @@ export const checkGame = gameId => {
     return connection('games').where({
         id: gameId
     });
-
 }
 
 export const resetGame = gameId => {
