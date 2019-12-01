@@ -1,9 +1,16 @@
-const express = require('express')
+import express from 'express'
+import {
+    port,
+    dbName
+} from './config'
+import setup from './store/setup'
+import games from './games'
+
+
 const app = express()
-const port = process.env.PORT || 3000
 
-app.get('/api', (req, res) => {
-  res.status(200).json({api: 'version 1'})
+app.use(express.json());
+app.use('/games', games)
+setup().then(() => {
+    app.listen(port, () => console.log('server started on port', port))
 })
-
-app.listen(port, () => console.log('server started on port', port))
