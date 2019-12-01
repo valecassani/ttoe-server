@@ -4,10 +4,9 @@ import {
 
 const setup = async () => {
     // await connection.raw('DROP DATABASE tictactoe')
-    await connection.raw('CREATE DATABASE IF NOT EXISTS tictactoe')
 
-    if (!await connection.schema.withSchema('tictactoe').hasTable('games')) {
-        await connection.schema.withSchema('tictactoe').createTable('games', table => {
+    if (!await connection.schema.hasTable('games')) {
+        await connection.schema.createTable('games', table => {
             table.increments('id')
             table.integer('maxUsers')
             table.integer('dimension')
@@ -17,8 +16,8 @@ const setup = async () => {
 
     }
 
-    if (!await connection.schema.withSchema('tictactoe').hasTable('moves')) {
-        await connection.schema.withSchema('tictactoe').createTable('moves', table => {
+    if (!await connection.schema.hasTable('moves')) {
+        await connection.schema.createTable('moves', table => {
             table.increments('id')
             table.integer('user')
             table.integer('xPos')

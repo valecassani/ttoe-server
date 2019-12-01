@@ -5,7 +5,7 @@ import setup from './setup';
 
 const connection = knex({
     client: 'mysql',
-    connection: process.env.CLEARDB_DATABASE_URL ? `${process.env.CLEARDB_DATABASE_URL}/tictactoe` : {
+    connection: process.env.CLEARDB_DATABASE_URL || {
         host: 'localhost',
         user: 'admin',
         password: 'admin',
