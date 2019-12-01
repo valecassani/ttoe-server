@@ -1,9 +1,9 @@
 import {
     connection
 } from './db'
-export const saveGame = game => {
-    return connection('games').insert(game);
-
+export const saveGame = async game => {
+    const [gameId] = await connection('games').insert(game);
+    return getGame(gameId)
 }
 export const checkGame = gameId => {
     return connection('games').where({
@@ -11,8 +11,29 @@ export const checkGame = gameId => {
     });
 }
 
-export const resetGame = gameId => {
-    return connection('moves').delete({
+export const getGame = async gameId => {
+    const moves = await getMovesFromGame(gameId)
+    const game = await connection('games').where({
+        id: gameId
+    }).first().select('id', 'maxUsers', 'winner', 'currentPlayer', 'dimension')
+
+    return {
+        ...game,
+        moves
+    }
+}
+
+export const resetGame = async gameId => {
+    return await connection('moves').where({
         gameId
-    })
+    }).del()
+}
+export const addMove = async move => {
+    return await connection('moves').insert(move)
+}
+
+export const getMovesFromGame = async gameId => {
+    return await connection('moves').where({
+        gameId
+    }).select('xPos', 'yPos', 'user')
 }

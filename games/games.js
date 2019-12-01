@@ -4,7 +4,10 @@ import {
 
 import {
     saveGame as createGame,
-    checkGame
+    checkGame,
+    addMove,
+    getGame,
+    resetGame
 } from '../store/games'
 const router = Router();
 
@@ -12,10 +15,11 @@ router.get('/:gameId', (req, res) => {
     const {
         gameId
     } = req.params
-    res.json({
-        gameId
+    getGame(gameId).then(game => {
+        res.json(game);
+        res.send()
     })
-    res.send()
+
 })
 
 router.post('/', (req, res) => {
@@ -31,9 +35,9 @@ router.post('/', (req, res) => {
         return;
     }
     createGame(game).then((resp) => {
+        console.log(resp);
         res.send({
-            id: resp[0],
-            ...game
+            ...resp
         })
 
     })
@@ -44,10 +48,24 @@ router.post('/:gameId/move', (req, res) => {
         gameId
     } = req.params;
 
+    const {
+        xPos,
+        yPos,
+        user
+    } = req.body
+
     checkGame(gameId).then(resp => {
         if (resp.length > 0) {
-            console.log('game exists')
-            res.send('ok')
+            addMove({
+                xPos,
+                yPos,
+                user,
+                gameId
+            })
+            res.send({
+                status: 'ok'
+            })
+
         } else {
             res.status(400)
             res.send(`invalid gameId: ${gameId}`)
@@ -57,9 +75,14 @@ router.post('/:gameId/move', (req, res) => {
 })
 
 router.post('/:gameId/reset', (req, res) => {
-
+    const {
+        gameId
+    } = req.params;
     // check valid gameId
-    res.status(400)
-    res.send('invalid game id')
+    resetGame(gameId).then(
+        res.send({
+            status: 'ok'
+        })
+    )
 })
 export default router

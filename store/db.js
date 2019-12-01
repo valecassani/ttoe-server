@@ -1,7 +1,4 @@
-import mysql from 'mysql';
-
 import knex from 'knex';
-import setup from './setup';
 
 const connection = knex({
     client: 'mysql',
