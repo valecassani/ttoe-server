@@ -16,8 +16,13 @@ router.get('/:gameId', (req, res) => {
         gameId
     } = req.params
     getGame(gameId).then(game => {
-        res.json(game);
-        res.send()
+        if (game.id) res.send(game)
+        else {
+            res.status(404)
+            res.send({
+                message: 'Not Found'
+            })
+        }
     })
 
 })
@@ -27,7 +32,7 @@ router.post('/', (req, res) => {
         ...req.body,
         currentPlayer: 1
     }
-    if (!game.maxUsers || !game.dimension) {
+    if (!game.players || !game.dimension) {
         res.status(400);
         res.send({
             error: "Invalid data"
@@ -35,7 +40,6 @@ router.post('/', (req, res) => {
         return;
     }
     createGame(game).then((resp) => {
-        console.log(resp);
         res.send({
             ...resp
         })
@@ -54,21 +58,21 @@ router.post('/:gameId/move', (req, res) => {
         user
     } = req.body
 
-    checkGame(gameId).then(resp => {
-        if (resp.length > 0) {
+    checkGame(gameId).then(game => {
+        if (game && game.winner === null) {
             addMove({
                 xPos,
                 yPos,
                 user,
                 gameId
-            })
-            res.send({
-                status: 'ok'
+            }).then(game => {
+                res.status(200)
+                res.send(game)
             })
 
         } else {
             res.status(400)
-            res.send(`invalid gameId: ${gameId}`)
+            res.send(`invalid input`)
         }
 
     })
