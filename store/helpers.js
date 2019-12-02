@@ -6,11 +6,10 @@ export const checkWinner = (game, lastMove) => {
     filteredMoves.forEach(currentItem => {
         newArr[currentItem.xPos][currentItem.yPos] = 1;
     });
-
     const n = game.dimension;
     // Check the column
     for (let i = 0; i < n; i++) {
-        if (newArr[i][lastMove.xPos] !== 1) break;
+        if (newArr[i][lastMove.yPos] !== 1) break;
         if (i === n - 1) {
             return true;
         }
@@ -18,8 +17,8 @@ export const checkWinner = (game, lastMove) => {
 
     // Check the row
     for (let i = 0; i < n; i++) {
-        if (newArr[lastMove.yPos][i] !== 1) break;
-        if (i == n - 1) {
+        if (newArr[lastMove.xPos][i] !== 1) break;
+        if (i === n - 1) {
             return true;
         }
     }

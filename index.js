@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { port, dbName } from './config';
+import { port } from './config';
 import setup from './store/setup';
 import games from './games';
 
