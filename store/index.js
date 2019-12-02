@@ -1,4 +1,1 @@
-export {
-    saveGame
-}
-from './games'
+export { saveGame } from './games';

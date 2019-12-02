@@ -10,6 +10,4 @@ const connection = knex({
     }
 });
 
-export {
-    connection
-}
+export { connection };

@@ -1,4 +1,1 @@
-export {
-    default
-}
-from './games';
+export { default } from './games';
